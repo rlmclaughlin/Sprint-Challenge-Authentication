@@ -9,11 +9,34 @@ module.exports = server => {
 };
 
 function register(req, res) {
-  // implement user registration
+  const creds = req.body; 
+  const hash = bcrypt.hashSync(cred.password, 4); 
+  creds.password = hash; 
+
+  db('users')
+    .insert(creds)
+    .then(ids => {
+      res.status(201).json(ids); 
+    })
+    .catch(err => { res.status(400).json({err: "there was an error"})
+  })
 }
 
 function login(req, res) {
-  // implement user login
+  const creds = req.body;
+
+  db('users')
+    .where({ username: creds.username })
+    .first()
+    .then(user => {
+      if (user && bcrypt.compareSync(creds.password, user.password)) {
+        const token = generateToken(user);
+        res.status(200).json({ message: 'Hello! Welcome friend!', token });
+      } else {
+        res.status(401).json({ message: 'Incorrect password. Try again!' });
+      }
+    })
+    .catch(err => res.json(err));
 }
 
 function getJokes(req, res) {
