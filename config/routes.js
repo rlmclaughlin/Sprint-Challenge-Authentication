@@ -14,7 +14,7 @@ module.exports = server => {
 
 function register(req, res) {
   const creds = req.body; 
-  const hash = bcrypt.hashSync(cred.password, 4); 
+  const hash = bcrypt.hashSync(creds.password, 4); 
   creds.password = hash; 
 
   db('users')
