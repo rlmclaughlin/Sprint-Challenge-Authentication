@@ -25,7 +25,6 @@ function register(req, res) {
         .then(user => {
           const token = tokenGenerator(user);
           res.status(201).json({user, token})
-          res.status(201).json(user, token);
         })
       })
       .catch(err => { res.status(400).json({err: "there was an error"})

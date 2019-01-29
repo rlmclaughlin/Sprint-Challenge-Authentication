@@ -1,4 +1,5 @@
-import React from 'react-router-dom'
+import React from 'react'
+import axios from 'axios'
 
 export default class SignUp extends React.Component {
     constructor(props){
@@ -9,29 +10,53 @@ export default class SignUp extends React.Component {
         }
     }
 
-    inputHandler = e => {
-        this.setState({[e.target.name]: e.target.value})
+    registerUser = ( newUser) =>{
+      axios.post('http://localhost:3300/api/register', newUser)
+        .then(res =>{
+          console.log(res.data);
+          localStorage.setItem('jwt', res.data.token);
+        })
+        .catch(err =>{ console.log('Failed to add new user');
+        })
     }
 
-    submitHandler = (e) => {
-        e.preventDefault()
+    inputHandler = (event)  =>{
+      this.setState({
+        [event.target.name] : event.target.value})
+    }
 
-        const user = {
-            username: this.state.username,
-            password: this.state.password,
-        };
-
-        this.props.addNewUser(user);
-        this.props.history.push('/');
-    }   
+    submitHandler = (event) =>{
+        event.preventDefault();
+        this.registerUser(this.state);
+        this.setState({
+            username: '',
+            password: ''
+        });
+        this.props.history.push('/');  
+    }
 
     render(){
         return(
-          <form onSubmit={this.submitHandler}>
-            <input type='text' name='username' value={this.state.username} onChange={this.inputHandler} placeholder="username" />
-            <input type='text' name='password' value={this.state.password} onChange={this.inputHandler} placeholder="password" />
-            <button type="submit">Create User</button>
-          </form>
+          <div> 
+            <h1>Dad Joke Registration</h1>
+             <form >
+               <h3> Username:</h3>
+               <input 
+                 name = 'username'
+                 value = {this.state.username}
+                 onChange = {this.inputHandler}
+                 type = 'text'
+               />
+               <h3>Password:</h3>
+               <input 
+                 name = 'password'
+                 value = {this.state.password}
+                 onChange = {this.inputHandler}
+                 type = 'text'
+                />
+                <button onClick = {this.submitHandler}>Create User</button>
+             </form>
+           </div> 
         )
     }
 }
