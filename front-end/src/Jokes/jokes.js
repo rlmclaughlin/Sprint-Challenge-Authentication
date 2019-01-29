@@ -35,9 +35,10 @@ export default class Jokes extends React.Component {
     render(){
       return(
         <div>
+          <h2> Your Dad Jokes: </h2> 
           {this.state.jokes.map(joke =>{
             return (
-              <div key={joke.id}>{joke.joke} <br/> <br/> </div>
+              <p key={joke.id}>{joke.joke} <br/> <br/> </p>
             )
           })}
         </div>

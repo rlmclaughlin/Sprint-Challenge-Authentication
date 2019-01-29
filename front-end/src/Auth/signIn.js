@@ -38,6 +38,7 @@ export default class SignIn extends React.Component {
     render(){
         return(
           <form onSubmit={this.submitHandler}>
+            <h2> Dad Joke Sign In </h2>
              <h3> Username:</h3>
                <input 
                  name = 'username'

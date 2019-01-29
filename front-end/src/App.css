@@ -1,5 +1,5 @@
 html {
-  background-color: white; 
+  background-color: black; 
 }
 
 .App {
@@ -7,10 +7,14 @@ html {
   line-height: 2; 
   color: black; 
   border: 1px solid black; 
-  box-shadow: 1px 0px 2px 1px; 
+  box-shadow: 0px 2px 2px 2px; 
   margin: auto; 
   padding: 10px; 
   width: 50%; 
+  animation-name: 'thebox';
+  animation-iteration-count: infinite; 
+  animation-duration: 20s; 
+  
 }
 
 h1{
@@ -33,15 +37,43 @@ h1{
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+p{
+  font-weight: bold; 
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+
+@keyframes thebox {
+  0% {
+    background-color: violet;
   }
-  to {
-    transform: rotate(360deg);
+  10% {
+    background-color: tomato;
+  }
+  20% {
+    background-color: aquamarine
+  }
+  30%{
+    background-color: blueviolet
+  }
+  40%{
+    background-color: lightgreen
+  }
+  50%{
+    background-color: seagreen
+  }
+  60%{
+    background-color: burlywood
+  }
+  70%{
+    background-color: lightcoral
+  }
+  80%{
+    background-color: lavender
+  }
+  90%{
+    background-color: azure
+  }
+  100%{
+    background-color: plum
   }
 }
