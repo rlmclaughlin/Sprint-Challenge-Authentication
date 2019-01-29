@@ -1,10 +1,8 @@
 const axios = require('axios');
 
-const { authenticate } = require('../auth/authenticate');
+const { authenticate, tokenGenerator } = require('../auth/authenticate');
 const bcrypt = require("bcryptjs");
 const db = require("../database/dbConfig");
-const jwtKey = "secret key!" ;
-const jwt = require("jsonwebtoken");
 
 module.exports = server => {
   server.post('/api/register', register);
@@ -20,33 +18,28 @@ function register(req, res) {
   db('users')
     .insert(creds)
     .then(ids => {
-      res.status(201).json(ids); 
+      const id = ids[0]
+      db('users')
+        .where({id})
+        .first()
+        .then(user => {
+          const token = tokenGenerator(user);
+          res.status(201).json({user, token})
+          res.status(201).json(user, token);
+        })
+      })
+      .catch(err => { res.status(400).json({err: "there was an error"})
     })
-    .catch(err => { res.status(400).json({err: "there was an error"})
-  })
-}
-
-function generateToken(user) {
-  const payload = {
-    subject: user.id,
-    username: user.username
-  };
-  const secret = jwtKey;
-  const options = {
-    expiresIn: "25m"
-  };
-  return jwt.sign(payload, secret, options);
 }
 
 function login(req, res) {
   const creds = req.body;
-
   db('users')
     .where({ username: creds.username })
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(creds.password, user.password)) {
-        const token = generateToken(user);
+        const token = tokenGenerator(user);
         res.status(200).json({ message: 'Hello! Welcome friend!', token });
       } else {
         res.status(401).json({ message: 'Incorrect password. Try again!' });
@@ -69,3 +62,5 @@ function getJokes(req, res) {
       res.status(500).json({ message: 'Error Fetching Jokes', error: err });
     });
 }
+
+
